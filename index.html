@@ -1,451 +1,108 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EduQuest | PreUniQuest – Preparación Preuniversitaria Gamificada</title>
-  <meta name="description" content="PreUniQuest: módulo preuniversitario de EduQuest inspirado en COAR. Itinerarios personalizados, simulacros adaptativos, mentoría y comunidad global." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
-  <style>
-    :root{
-      --bg: #0b1020;
-      --card: rgba(255,255,255,0.06);
-      --muted: #a7b0c0;
-      --text: #e8ecf5;
-      --primary: #7c9bff;
-      --accent: #7bf1a8;
-      --warning: #ffd166;
-      --danger: #ff6b6b;
-      --grad1: linear-gradient(135deg,#3950ff 0%,#6a9cff 35%,#7bf1a8 100%);
-      --glass: backdrop-filter: blur(9px);
-      --radius: 18px;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(1200px 800px at 10% -10%, #1a2140 0%, transparent 60%),radial-gradient(1200px 800px at 110% 10%, #15223a 0%, transparent 55%), var(--bg);color:var(--text);}
-    a{color:inherit;text-decoration:none}
-    .container{width:min(1200px,92%);margin:0 auto}
-    header{position:sticky;top:0;z-index:50;background:linear-gradient(to bottom, rgba(11,16,32,.9), rgba(11,16,32,.6));border-bottom:1px solid rgba(255,255,255,.08);}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand .logo{width:38px;height:38px;border-radius:10px;background:var(--grad1);box-shadow:var(--shadow)}
-    .brand h1{font-family:Poppins,Inter,sans-serif;font-size:18px;letter-spacing:.3px;margin:0}
-    nav ul{display:flex;gap:18px;list-style:none;padding:0;margin:0}
-    nav a{padding:8px 12px;border-radius:10px;color:var(--muted)}
-    nav a:hover{background:rgba(255,255,255,.06);color:var(--text)}
-    .cta{display:flex;align-items:center;gap:12px}
-    .btn{border:1px solid rgba(255,255,255,.14);padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}
-    .btn.primary{background:var(--grad1);color:#0b1020;border:none;box-shadow:var(--shadow);font-weight:700}
-    .btn.ghost:hover{background:rgba(255,255,255,.08)}
-    /* hero */
-    .hero{position:relative;overflow:hidden}
-    .hero .container{display:grid;grid-template-columns:1.15fr 0.85fr;gap:28px;padding:56px 0 32px}
-    .badge{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border:1px dashed rgba(255,255,255,.25);border-radius:999px;background:rgba(255,255,255,.03);font-size:12px;color:var(--muted)}
-    .title{font-family:Poppins,Inter,sans-serif;font-size:48px;line-height:1.05;margin:14px 0}
-    .subtitle{color:#c8d0df;max-width:60ch}
-    .hero-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:22px}
-    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-    .card h4{margin:0 0 6px 0}
-    .chip{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);font-size:12px;color:var(--muted)}
-    .stat{display:flex;align-items:center;gap:10px}
-    .stat strong{font-size:22px}
-    .screen{position:relative;aspect-ratio:16/10;border-radius:20px;padding:14px;background:radial-gradient(120% 120% at 20% 10%, #233b7a 0%,#101933 55%, #0b1020 80%);border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow)}
-    .screen-inner{height:100%;border-radius:12px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));display:grid;grid-template-rows:auto 1fr}
-    .tabs{display:flex;gap:8px;padding:10px;border-bottom:1px solid rgba(255,255,255,.08)}
-    .tab{padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.05);cursor:pointer;font-size:13px}
-    .tab.active{background:var(--grad1);color:#0b1020;font-weight:700}
-    .panel{padding:14px;display:none}
-    .panel.active{display:block}
-    .grid{display:grid;gap:18px}
-    .grid.c3{grid-template-columns:repeat(3,1fr)}
-    .grid.c2{grid-template-columns:repeat(2,1fr)}
-    .kpi{padding:16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
-    .progress{height:10px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden}
-    .progress > span{display:block;height:100%;background:var(--grad1)}
-    section{padding:56px 0}
-    section h2{font-family:Poppins,Inter,sans-serif;font-size:30px;margin:0 0 6px}
-    section p.lead{color:#c8d0df;max-width:70ch}
-    .feature{display:flex;gap:14px}
-    .feature i{font-size:22px}
-    .feature .f-body{color:#cdd6e6}
-    .pill{display:inline-flex;align-items:center;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;font-size:12px;color:var(--muted)}
-    .tag{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);font-size:12px;color:var(--muted)}
-    .list{display:grid;gap:12px}
-    .list li{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:12px;border-radius:12px}
-    .pricing{display:grid;gap:18px;grid-template-columns:repeat(3,1fr)}
-    .plan{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;position:relative}
-    .plan.popular{outline:2px solid #7bf1a8}
-    .plan h3{margin:6px 0}
-    .price{font-size:34px;font-weight:800}
-    .small{font-size:12px;color:var(--muted)}
-    .divider{height:1px;background:rgba(255,255,255,.08);margin:12px 0}
-    .flex{display:flex;gap:12px;align-items:center}
-    .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-    footer{padding:30px 0;border-top:1px solid rgba(255,255,255,.08);color:#9aa5b8}
-    .footgrid{display:grid;gap:16px;grid-template-columns:2fr 1fr 1fr}
-    .footgrid a{color:#b9c3d6}
-
-    /* responsive */
-    @media (max-width: 980px){
-      .hero .container{grid-template-columns:1fr}
-      .grid.c3{grid-template-columns:1fr}
-      .grid.c2{grid-template-columns:1fr}
-      .pricing{grid-template-columns:1fr}
-      .cols{grid-template-columns:1fr}
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PreUniQuest — Simulador UNI (Razonamiento Verbal)</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Simulador dinámico de preguntas inspiradas en Razonamiento Verbal UNI. Carga desde JSON, cronómetro, puntaje y revisión de respuestas." />
 </head>
 <body>
-  <header>
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <h1>EduQuest <span style="color:var(--muted);font-weight:400">| PreUniQuest</span></h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="#itinerarios">Itinerarios</a></li>
-          <li><a href="#contenido">Contenido CAR/COAR</a></li>
-          <li><a href="#mentoria">Mentoría</a></li>
-          <li><a href="#comunidad">Comunidad</a></li>
-          <li><a href="#metricas">Métricas</a></li>
-          <li><a href="#precios">Precios</a></li>
-        </ul>
-      </nav>
-      <div class="cta">
-        <a class="btn ghost" href="#demo"><i class="ri-play-circle-line"></i> Demo</a>
-        <a class="btn primary" href="#registro"><i class="ri-rocket-2-fill"></i> Empezar</a>
-      </div>
+  <header class="topbar">
+    <h1>PreUniQuest <span>Simulador UNI</span></h1>
+    <div class="actions">
+      <button id="darkToggle" title="Modo oscuro">🌙</button>
+      <a class="btn ghost" href="#" id="downloadState" title="Exportar resultados (.json)">⬇ Exportar</a>
     </div>
   </header>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero" id="inicio">
-      <div class="container">
-        <div>
-          <span class="badge"><i class="ri-award-line"></i> Inspirado en COAR y programas IB</span>
-          <h2 class="title">Prepárate para la universidad con <span style="background:var(--grad1);-webkit-background-clip:text;background-clip:text;color:transparent">PreUniQuest</span></h2>
-          <p class="subtitle">Itinerarios personalizados, simulacros adaptativos, mentoría híbrida (IA + expertos) y una comunidad global. Democratizamos la excelencia académica con experiencias de aprendizaje de alto rendimiento.</p>
-          <div class="hero-cards">
-            <div class="card">
-              <h4><i class="ri-speed-up-line"></i> Diagnóstico Inteligente</h4>
-              <p>Un test inicial calibra tu nivel para diseñar <em>quests</em> en matemáticas, ciencias, humanidades y razonamiento.</p>
-              <div class="stat"><i class="ri-flashlight-line"></i> <strong>+92%</strong> ajuste a nivel real <span class="tag">IA adaptativa</span></div>
-            </div>
-            <div class="card">
-              <h4><i class="ri-bar-chart-grouped-line"></i> Simulacros en tiempo real</h4>
-              <p>Práctica para exámenes de ingreso (SAT, ACT, admisiones nacionales) con feedback inmediato y reportes accionables.</p>
-              <div class="progress" aria-label="progreso promedio"><span style="width:72%"></span></div>
-            </div>
-            <div class="card">
-              <h4><i class="ri-graduation-cap-line"></i> Mentoría</h4>
-              <p>Tutores virtuales que emulan docentes COAR y opción premium con mentores alumni de colegios reconocidos.</p>
-              <span class="chip"><i class="ri-user-star-line"></i> Match en 48h</span>
-            </div>
-            <div class="card">
-              <h4><i class="ri-earth-line"></i> Comunidad Global</h4>
-              <p>Hackathons, debates y proyectos internacionales. Certificados con blockchain para tu portafolio.</p>
-              <span class="chip"><i class="ri-shield-star-line"></i> Certificación</span>
-            </div>
-          </div>
-          <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap">
-            <a class="btn primary" href="#registro">Crear cuenta gratis</a>
-            <a class="btn" href="#itinerarios">Ver cómo funciona</a>
-          </div>
-        </div>
+  <main class="container">
+    <section class="intro card">
+      <h2>Razonamiento Verbal — Práctica</h2>
+      <p>Banco de preguntas <strong>inspiradas</strong> en el estilo de admisión de la <strong>UNI</strong>. Elige parámetros y comienza el simulacro.</p>
 
-        <div class="screen" aria-label="Vista del panel PreUniQuest">
-          <div class="screen-inner">
-            <div class="tabs">
-              <button class="tab active" data-tab="tab1"><i class="ri-compasses-2-line"></i> Itinerario</button>
-              <button class="tab" data-tab="tab2"><i class="ri-file-list-3-line"></i> Simulacro</button>
-              <button class="tab" data-tab="tab3"><i class="ri-line-chart-line"></i> Progreso</button>
-            </div>
-            <div id="tab1" class="panel active">
-              <div class="grid c2">
-                <div class="kpi">
-                  <div class="flex"><i class="ri-calculator-line"></i><strong>Matemática Avanzada</strong></div>
-                  <p class="small">Álgebra, cálculo y razonamiento – plan de 6 semanas.</p>
-                  <div class="progress" aria-label="avance"><span style="width:40%"></span></div>
-                </div>
-                <div class="kpi">
-                  <div class="flex"><i class="ri-flask-line"></i><strong>Ciencias</strong></div>
-                  <p class="small">Física y química aplicada con laboratorios virtuales.</p>
-                  <div class="progress"><span style="width:65%"></span></div>
-                </div>
-              </div>
-            </div>
-            <div id="tab2" class="panel">
-              <ul class="list">
-                <li class="flex"><i class="ri-timer-line"></i><div><strong>SAT – Practice #1</strong><div class="small">Sección Math • 70 preguntas • 80 min</div></div><span style="margin-left:auto" class="pill">Dificultad: Intermedia</span></li>
-                <li class="flex"><i class="ri-timer-line"></i><div><strong>Admisión Perú – Razonamiento</strong><div class="small">40 preguntas • 60 min</div></div><span style="margin-left:auto" class="pill">Adaptativo</span></li>
-                <li class="flex"><i class="ri-timer-line"></i><div><strong>ACT – Science</strong><div class="small">35 preguntas • 45 min</div></div><span style="margin-left:auto" class="pill">Cronometrado</span></li>
-              </ul>
-              <div style="margin-top:12px;display:flex;gap:12px"><a class="btn primary" href="#demo">Iniciar simulacro</a><a class="btn" href="#">Ver banco de preguntas</a></div>
-            </div>
-            <div id="tab3" class="panel">
-              <div class="grid c3">
-                <div class="kpi"><div class="small">Preparación total</div><div class="progress"><span style="width:72%"></span></div></div>
-                <div class="kpi"><div class="small">Precisión en simulacros</div><div class="progress"><span style="width:66%"></span></div></div>
-                <div class="kpi"><div class="small">Hábitos (streak)</div><div class="progress"><span style="width:88%"></span></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="controls">
+        <label>
+          Categoría
+          <select id="categoria">
+            <option value="UNI-Verbal">UNI-Verbal</option>
+          </select>
+        </label>
+        <label>
+          Nº de preguntas
+          <input type="number" id="numPreguntas" min="3" max="50" value="10" />
+        </label>
+        <label>
+          Tiempo (min)
+          <input type="number" id="minutos" min="1" max="180" value="10" />
+        </label>
+        <button id="btnComenzar" class="btn primary">Comenzar</button>
       </div>
     </section>
 
-    <!-- ITINERARIOS -->
-    <section id="itinerarios">
-      <div class="container">
-        <h2>Itinerarios Personalizados</h2>
-        <p class="lead">La IA analiza tu perfil (notas, intereses y diagnóstico) para construir <strong>quests preuni</strong> que replican currículos de colegios de alto rendimiento.</p>
-        <div class="grid c3" style="margin-top:18px">
-          <div class="card">
-            <h4><i class="ri-compasses-2-line"></i> Ruta STEM – 8 semanas</h4>
-            <p>Álgebra → Cálculo → Física I → Laboratorios virtuales. Proyecto final: diseño de un sensor IoT.</p>
-            <div class="flex"><span class="tag">COAR-Inspirado</span><span class="tag">Proyecto</span><span class="tag">IA Adaptativa</span></div>
-          </div>
-          <div class="card">
-            <h4><i class="ri-book-2-line"></i> Humanidades y Debate</h4>
-            <p>Lectura crítica, escritura académica, debates éticos y simulación de entrevista universitaria.</p>
-            <div class="flex"><span class="tag">Ensayos</span><span class="tag">Oratoria</span><span class="tag">Rubricas</span></div>
-          </div>
-          <div class="card">
-            <h4><i class="ri-bar-chart-box-line"></i> Data & Negocios</h4>
-            <p>Estadística aplicada, hojas de cálculo, visualización y caso de negocio con pitch final.</p>
-            <div class="flex"><span class="tag">Dashboard</span><span class="tag">Pitch</span><span class="tag">Mentoría</span></div>
-          </div>
+    <section id="quiz" class="card hidden">
+      <div class="quiz-head">
+        <div class="progress-wrap">
+          <div id="progress" class="progress"></div>
         </div>
+        <div class="meta">
+          <span id="contador">1 / 10</span>
+          <span id="timer">10:00</span>
+        </div>
+      </div>
+
+      <h3 id="enunciado" class="enunciado"></h3>
+      <ul id="opciones" class="opciones"></ul>
+      <div id="explicacion" class="explicacion hidden"></div>
+
+      <div class="nav">
+        <button id="btnAnterior" class="btn ghost" disabled>← Anterior</button>
+        <button id="btnSiguiente" class="btn">Siguiente →</button>
+        <button id="btnFinalizar" class="btn danger">Finalizar</button>
       </div>
     </section>
 
-    <!-- CONTENIDO COAR/CAR -->
-    <section id="contenido">
-      <div class="container">
-        <h2>Contenido de Alto Rendimiento integrado</h2>
-        <p class="lead">Accede a lecciones, guías IB y webinars de colegios de excelencia (COAR y CAR), más simulaciones de vida académica elite.</p>
-        <div class="cols">
-          <div class="card">
-            <h4><i class="ri-movie-line"></i> Colaboraciones virtuales</h4>
-            <ul class="list">
-              <li>Lecciones grabadas y talleres de liderazgo y ciencia.</li>
-              <li>Webinars con docentes y egresados destacados.</li>
-              <li>Casos de innovación y preparación para becas.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4><i class="ri-gamepad-line"></i> Simulación “Día en un COAR”</h4>
-            <p>Role-play con desafíos grupales, gestión del tiempo, rúbricas y evaluación por pares.</p>
-            <div class="flex">
-              <span class="pill"><i class="ri-team-line"></i> Trabajo colaborativo</span>
-              <span class="pill"><i class="ri-shield-check-line"></i> Evidencias verificadas</span>
-            </div>
-          </div>
-        </div>
+    <section id="resultado" class="card hidden">
+      <h2>Resultado</h2>
+      <p id="resumen"></p>
+
+      <div class="score-cards">
+        <div class="pill ok" id="pillOk">0 correctas</div>
+        <div class="pill bad" id="pillBad">0 incorrectas</div>
+        <div class="pill neutro" id="pillNeutro">0 sin responder</div>
+      </div>
+
+      <details class="review">
+        <summary>Revisar preguntas y respuestas</summary>
+        <ol id="revisiónLista"></ol>
+      </details>
+
+      <div class="result-actions">
+        <button class="btn ghost" id="btnReintentar">Reintentar</button>
+        <button class="btn primary" id="btnNuevo">Nuevo simulacro</button>
       </div>
     </section>
 
-    <!-- MENTORÍA Y ORIENTACIÓN -->
-    <section id="mentoria">
-      <div class="container">
-        <h2>Mentoría Híbrida y Orientación Vocacional</h2>
-        <p class="lead">Tutores virtuales con IA + mentores reales (alumni) para guiar tu camino académico y profesional.</p>
-        <div class="grid c3" style="margin-top:18px">
-          <div class="card">
-            <h4><i class="ri-robot-line"></i> Tutor IA</h4>
-            <p>Explicaciones paso a paso, pistas en tiempo real y ejercicios generados a tu medida.</p>
-            <a class="btn" href="#demo"><i class="ri-message-3-line"></i> Probar tutor</a>
-          </div>
-          <div class="card">
-            <h4><i class="ri-user-star-line"></i> Mentorías 1:1</h4>
-            <p>Sesiones por videollamada con egresados de colegios de alto rendimiento.</p>
-            <a class="btn" href="#registro"><i class="ri-calendar-check-line"></i> Agendar</a>
-          </div>
-          <div class="card">
-            <h4><i class="ri-briefcase-line"></i> Vocación & Entrevistas</h4>
-            <p>Evaluaciones psicométricas, simulacros de entrevista y guía de portafolio.</p>
-            <a class="btn" href="#"><i class="ri-psychotherapy-line"></i> Iniciar evaluación</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- COMUNIDAD -->
-    <section id="comunidad">
-      <div class="container">
-        <h2>Comunidad Preuni Global</h2>
-        <p class="lead">Únete a <strong>guilds</strong> por interés, participa en hackathons y colabora en proyectos internacionales.</p>
-        <div class="grid c3" style="margin-top:18px">
-          <div class="card">
-            <h4><i class="ri-chat-poll-line"></i> Debates</h4>
-            <p>Foros moderados con rúbricas claras y badges por aportes de calidad.</p>
-          </div>
-          <div class="card">
-            <h4><i class="ri-cpu-line"></i> Hackathons</h4>
-            <p>Retos STEM, data y humanidades con certificados en blockchain.</p>
-          </div>
-          <div class="card">
-            <h4><i class="ri-global-line"></i> Proyectos Globales</h4>
-            <p>Equipos multiculturales, aprendizaje basado en retos y presentaciones públicas.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MÉTRICAS / DASHBOARD -->
-    <section id="metricas">
-      <div class="container">
-        <h2>Dashboards y Certificación</h2>
-        <p class="lead">Seguimiento granular del progreso con metas universitarias y certificados verificables.</p>
-        <div class="grid c3">
-          <div class="kpi">
-            <div class="small">% de Preparación</div>
-            <div class="progress"><span style="width:72%"></span></div>
-          </div>
-          <div class="kpi">
-            <div class="small">Benchmarks COAR</div>
-            <div class="progress"><span style="width:64%"></span></div>
-          </div>
-          <div class="kpi">
-            <div class="small">Portafolio verificado</div>
-            <div class="progress"><span style="width:85%"></span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRECIOS -->
-    <section id="precios">
-      <div class="container">
-        <h2>Planes y Precios</h2>
-        <p class="lead">Acceso inclusivo con modalidad gratuita y opciones premium para mentoría y certificación avanzada.</p>
-        <div class="pricing">
-          <div class="plan">
-            <span class="pill">Gratis</span>
-            <h3>Starter</h3>
-            <div class="price">S/ 0</div>
-            <div class="small">Itinerarios base, simulacros limitados.</div>
-            <div class="divider"></div>
-            <ul class="list">
-              <li>Diagnóstico inicial</li>
-              <li>2 simulacros/mes</li>
-              <li>Foros y guilds</li>
-            </ul>
-            <a class="btn" href="#registro">Comenzar</a>
-          </div>
-          <div class="plan popular">
-            <span class="pill"><i class="ri-star-smile-line"></i> Recomendado</span>
-            <h3>Pro</h3>
-            <div class="price">S/ 39<span class="small">/mes</span></div>
-            <div class="small">Simulacros ilimitados, biblioteca premium.</div>
-            <div class="divider"></div>
-            <ul class="list">
-              <li>Itinerarios adaptativos</li>
-              <li>Biblioteca COAR/IB</li>
-              <li>Certificados básicos</li>
-            </ul>
-            <a class="btn primary" href="#registro">Probar 7 días</a>
-          </div>
-          <div class="plan">
-            <span class="pill">Premium</span>
-            <h3>Mentor+</h3>
-            <div class="price">S/ 129<span class="small">/mes</span></div>
-            <div class="small">Mentorías 1:1 y certificación avanzada.</div>
-            <div class="divider"></div>
-            <ul class="list">
-              <li>Mentores alumni</li>
-              <li>Portafolio verificado</li>
-              <li>Preparación entrevistas</li>
-            </ul>
-            <a class="btn" href="#registro">Quiero Mentor</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- REGISTRO / CTA -->
-    <section id="registro">
-      <div class="container">
-        <div class="card">
-          <h2>Comienza hoy</h2>
-          <p class="lead">Crea una cuenta gratuita y accede a tu primer simulacro adaptativo en menos de 2 minutos.</p>
-          <form onsubmit="event.preventDefault(); alert('¡Cuenta creada! (demo)');" class="grid c2">
-            <div>
-              <label for="nombre" class="small">Nombre</label>
-              <input id="nombre" required placeholder="Tu nombre" style="width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:var(--text)"/>
-            </div>
-            <div>
-              <label for="email" class="small">Correo</label>
-              <input id="email" type="email" required placeholder="tucorreo@email.com" style="width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:var(--text)"/>
-            </div>
-            <div>
-              <label for="pais" class="small">País</label>
-              <select id="pais" style="width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:var(--text)">
-                <option>Perú</option>
-                <option>Chile</option>
-                <option>México</option>
-                <option>Colombia</option>
-                <option>Otro</option>
-              </select>
-            </div>
-            <div>
-              <label for="ruta" class="small">Ruta de interés</label>
-              <select id="ruta" style="width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:var(--text)">
-                <option>STEM</option>
-                <option>Humanidades</option>
-                <option>Data & Negocios</option>
-              </select>
-            </div>
-            <div class="flex" style="grid-column:1/-1;justify-content:flex-end">
-              <button class="btn" type="reset">Limpiar</button>
-              <button class="btn primary" type="submit">Crear cuenta</button>
-            </div>
-          </form>
-        </div>
-      </div>
+    <section class="card tip">
+      <h3>Cómo añadir más preguntas</h3>
+      <p>Edita el archivo <code>preguntas.json</code> y agrega objetos con este formato:</p>
+<pre><code>{
+  "categoria": "UNI-Verbal",
+  "anio": 2020,
+  "origen": "inspirado",
+  "pregunta": "Enunciado aquí...",
+  "opciones": ["A", "B", "C", "D", "E"],
+  "respuesta": 2,
+  "explicacion": "Breve justificación de la alternativa correcta."
+}</code></pre>
+      <p><strong>Nota:</strong> Evita copiar texto protegido literalmente; resume/parafrasea para uso educativo.</p>
     </section>
   </main>
 
-  <footer>
-    <div class="container footgrid">
-      <div>
-        <strong>EduQuest | PreUniQuest</strong>
-        <p class="small">La ruta más directa y accesible a la educación superior de élite para estudiantes de 15–18 años.</p>
-      </div>
-      <div>
-        <div class="small" style="margin-bottom:6px">Secciones</div>
-        <a href="#itinerarios">Itinerarios</a><br>
-        <a href="#contenido">Contenido</a><br>
-        <a href="#mentoria">Mentoría</a><br>
-        <a href="#comunidad">Comunidad</a>
-      </div>
-      <div>
-        <div class="small" style="margin-bottom:6px">Legal</div>
-        <a href="#">Términos</a><br>
-        <a href="#">Privacidad</a><br>
-        <a href="#">Soporte</a>
-      </div>
-    </div>
+  <footer class="footer">
+    <small>© 2025 PreUniQuest — Simulador educativo. No afiliado a la UNI.</small>
   </footer>
 
-  <script>
-    // Tabs demo
-    const tabs = document.querySelectorAll('.tab');
-    const panels = document.querySelectorAll('.panel');
-    tabs.forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        tabs.forEach(b=>b.classList.remove('active'));
-        panels.forEach(p=>p.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
-      })
-    })
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
